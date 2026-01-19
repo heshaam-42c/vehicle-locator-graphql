@@ -1,0 +1,43 @@
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  is_admin: Boolean!
+}
+
+type Vehicle {
+  id: ID!
+  vin: String!
+  lat: Float!
+  lng: Float!
+  make: String!
+  model: String!
+  year: Int!
+  color: String!
+  status: String!
+  lastUpdated: String!
+}
+
+type AuthPayload {
+  message: String!
+  token: String
+  _id: ID
+}
+
+type Query {
+  vehicles: [Vehicle!]!
+  vehicle(id: ID!): Vehicle
+}
+
+type Mutation {
+  login(email: String!, pass: String!): AuthPayload!
+  register(email: String!, pass: String!, name: String!, is_admin: Boolean): AuthPayload!
+  addVehicle(vin: String!, lat: Float!, lng: Float!, make: String!, model: String!, year: Int!, color: String!): Vehicle!
+  updateVehicleLocation(id: ID!, lat: Float!, lng: Float!): Vehicle!
+  deleteVehicle(id: ID!): Vehicle!
+}
