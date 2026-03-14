@@ -1,0 +1,77 @@
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
+directive @stringValue(minLength: Int, maxLength: Int, pattern: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+directive @numberValue(minimum: Int, maximum: Int) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+directive @cost(weight: String!) on FIELD_DEFINITION
+directive @list(minItems: Int!, maxItems: Int!) on FIELD_DEFINITION
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  is_admin: Boolean!
+}
+
+type Vehicle {
+  id: ID! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  vin: String! @stringValue(minLength: 17, maxLength: 17, pattern:"*")
+  lat: Float! @numberValue(minimum: -180, maximum: 180)
+  lng: Float! @numberValue(minimum: -180, maximum: 180)
+  make: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  model: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  year: Int! @numberValue(minimum: 1000, maximum: 9999)
+  color: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  status: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  lastUpdated: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+}
+
+type AuthPayload {
+  message: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  token: String @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  _id: ID @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+}
+
+type Query {
+  vehicles: [Vehicle!]! @list(minItems: 5, maxItems: 100) @cost(weight: "5")
+
+  vehicle(
+    id: ID! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  ): Vehicle @cost(weight: "2")
+}
+
+type Mutation {
+  login(
+    email: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    pass: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  ): AuthPayload! @cost(weight: "2")
+  
+  register(
+    email: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    pass: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    name: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    is_admin: Boolean
+  ): AuthPayload! @cost(weight: "3")
+  
+  addVehicle(
+    vin: String! @stringValue(minLength: 17, maxLength: 17, pattern:"*"), 
+    lat: Float! @numberValue(minimum: -180, maximum: 180), 
+    lng: Float! @numberValue(minimum: -180, maximum: 180), 
+    make: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    model: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    year: Int! @numberValue(minimum: 1000, maximum: 9999), 
+    color: String! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  ): Vehicle! @cost(weight: "4")
+
+  updateVehicleLocation(
+    id: ID! @stringValue(minLength: 1, maxLength: 64, pattern:"*"), 
+    lat: Float! @numberValue(minimum: -180, maximum: 180), 
+    lng: Float! @numberValue(minimum: -180, maximum: 180)
+  ): Vehicle! @cost(weight: "3")
+
+  deleteVehicle(
+    id: ID! @stringValue(minLength: 1, maxLength: 64, pattern:"*")
+  ): Vehicle! @cost(weight: "2")
+}
