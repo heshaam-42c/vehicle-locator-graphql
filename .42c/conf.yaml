@@ -1,0 +1,3 @@
+apis:
+  schema.graphql:
+    alias: schema.graphql

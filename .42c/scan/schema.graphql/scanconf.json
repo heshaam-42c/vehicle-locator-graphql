@@ -1,0 +1,456 @@
+{
+  "version": "2.0.0",
+  "runtimeConfiguration": {
+    "environment": "default",
+    "laxTestingModeEnabled": false,
+    "apiConnectivityCheck": true,
+    "logLevel": "error",
+    "logDestination": "stdout+platform",
+    "logMaxFileSize": 2147483648,
+    "requestHeaderNameRequestId": "x-scan-request-id",
+    "requestHeaderNameScenarioId": "x-scan-scenario-id",
+    "requestHeaderNameRequestType": "x-scan-request-type",
+    "requestFlowrate": 100,
+    "requestTimeout": 30,
+    "requestTlsInsecureSkipVerify": true,
+    "responseFollowRedirection": false,
+    "responseMaxBodySizeScan": 10485760,
+    "happyPathOnly": false,
+    "maxRequestRetryAttempts": 5,
+    "maxScanDuration": 1800,
+    "memoryLimit": 2147483648,
+    "memoryTimeSpan": 10,
+    "reportMaxRequestSizeHappyPath": 8092,
+    "reportMaxRequestSizeTest": 8092,
+    "reportIncludeRequestBody": true,
+    "reportIncludeResponseBody": true,
+    "reportMaxHttpResponseSizeHappyPath": 8092,
+    "reportMaxBodySizeHappyPath": 8092,
+    "reportMaxHttpResponseSizeTest": 8092,
+    "reportMaxBodySizeTest": 8092,
+    "reportIssuesOnly": false,
+    "reportMaxIssues": 1000,
+    "reportMaxSize": 20971520,
+    "reportGenerateCurlCommand": true,
+    "normalizeServerUrls": true
+  },
+  "customizations": {
+    "happyPaths": {
+      "retry": 1,
+      "responsePolicy": {
+        "httpStatusExpected": true,
+        "mustBeConformant": true,
+        "skipHeaderAssessment": true,
+        "skipBodyAssessment": true
+      },
+      "httpStatusExpected": [
+        "2XX",
+        "404"
+      ]
+    },
+    "tests": {
+      "responsePolicy": {
+        "httpStatusExpected": true,
+        "mustBeConformant": true,
+        "skipHeaderAssessment": true,
+        "skipBodyAssessment": true
+      }
+    },
+    "requests": {}
+  },
+  "environments": {
+    "default": {
+      "variables": {
+        "host": {
+          "name": "SCAN42C_HOST",
+          "from": "environment",
+          "required": false,
+          "default": "http://localhost:4000/graphql"
+        }
+      }
+    }
+  },
+  "operations": {
+    "mutation-addVehicle": {
+      "operationId": "mutation-addVehicle",
+      "request": {
+        "operationId": "mutation-addVehicle",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "mutation-addVehicle",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "mutation HappyPathRequest($vin: String!, $lat: Float!, $lng: Float!, $make: String!, $model: String!, $year: Int!, $color: String!){addVehicle(vin: $vin, lat: $lat, lng: $lng, make: $make, model: $model, year: $year, color: $color){color id lastUpdated lat lng make model status vin year}}",
+                "variables": {
+                  "color": "joxzadrtmhtjntocxycljmiqnravwhsa",
+                  "lat": 2.5655827393050296e+38,
+                  "lng": 1.8428613342671684e+38,
+                  "make": "gigvfqjkswxhyvmwfgamoxgroofrwibh",
+                  "model": "oygzoifihwzctuzbretkkqrvexbhiirb",
+                  "vin": "kehcednopvjnqchvrdmtqxmaylmqprvz",
+                  "year": 1611734303
+                }
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/mutation-addVehicle/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "mutation-deleteVehicle": {
+      "operationId": "mutation-deleteVehicle",
+      "request": {
+        "operationId": "mutation-deleteVehicle",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "mutation-deleteVehicle",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "mutation HappyPathRequest($id: ID!){deleteVehicle(id: $id){color id lastUpdated lat lng make model status vin year}}",
+                "variables": {
+                  "id": "xltfkffukoyrbggydqnobeothzuxvspo"
+                }
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/mutation-deleteVehicle/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "mutation-login": {
+      "operationId": "mutation-login",
+      "request": {
+        "operationId": "mutation-login",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "mutation-login",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "mutation HappyPathRequest($email: String!, $pass: String!){login(email: $email, pass: $pass){_id message token}}",
+                "variables": {
+                  "email": "uryfilwvgwpwstxoqeeclmubltwzzbxg",
+                  "pass": "kejdduqszpvkixbtoxywkhhrsvwzozwk"
+                }
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/mutation-login/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "mutation-register": {
+      "operationId": "mutation-register",
+      "request": {
+        "operationId": "mutation-register",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "mutation-register",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "mutation HappyPathRequest($email: String!, $pass: String!, $name: String!, $is_admin: Boolean){register(email: $email, pass: $pass, name: $name, is_admin: $is_admin){_id message token}}",
+                "variables": {
+                  "email": "sdwjahzzqtetshmaqpsjiqpszhdvbbey",
+                  "is_admin": false,
+                  "name": "rxxvfgmdtupqktcyavfxubllnathxjfk",
+                  "pass": "sjwoudhbszppnsadzeuwbpxcapcrdjcr"
+                }
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/mutation-register/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "mutation-updateVehicleLocation": {
+      "operationId": "mutation-updateVehicleLocation",
+      "request": {
+        "operationId": "mutation-updateVehicleLocation",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "mutation-updateVehicleLocation",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "mutation HappyPathRequest($id: ID!, $lat: Float!, $lng: Float!){updateVehicleLocation(id: $id, lat: $lat, lng: $lng){color id lastUpdated lat lng make model status vin year}}",
+                "variables": {
+                  "id": "sdbmdkwiahznbseuuipwtoiaksllgsoa",
+                  "lat": 7.771785491603069e+37,
+                  "lng": 2.67852917709907e+38
+                }
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/mutation-updateVehicleLocation/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "query-vehicle": {
+      "operationId": "query-vehicle",
+      "request": {
+        "operationId": "query-vehicle",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "query-vehicle",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "query HappyPathRequest($id: ID!){vehicle(id: $id){color id lastUpdated lat lng make model status vin year}}",
+                "variables": {
+                  "id": "dxefhqvgtnixflxlgbrdhhwdchotyndg"
+                }
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/query-vehicle/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "query-vehicles": {
+      "operationId": "query-vehicles",
+      "request": {
+        "operationId": "query-vehicles",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "query-vehicles",
+            "method": "POST",
+            "url": "{{host}}/",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/graphql-response+json;charset=utf-8, application/json;charset=utf-8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "query": "query HappyPathRequest{vehicles{color id lastUpdated lat lng make model status vin year}}"
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/query-vehicles/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    }
+  },
+  "authenticationDetails": []
+}
