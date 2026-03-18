@@ -56,7 +56,11 @@
         "skipBodyAssessment": true
       }
     },
-    "requests": {}
+    "requests": {
+      "additionalHeaders": {
+        "Authorization": "{{ENV_API_TOKEN}}"
+      }
+    }
   },
   "environments": {
     "default": {
@@ -65,7 +69,7 @@
           "name": "SCAN42C_HOST",
           "from": "environment",
           "required": false,
-          "default": "http://localhost:4000/graphql"
+          "default": "http://localhost:4000"
         }
       }
     }
@@ -208,8 +212,8 @@
               "json": {
                 "query": "mutation HappyPathRequest($email: String!, $pass: String!){login(email: $email, pass: $pass){_id message token}}",
                 "variables": {
-                  "email": "uryfilwvgwpwstxoqeeclmubltwzzbxg",
-                  "pass": "kejdduqszpvkixbtoxywkhhrsvwzozwk"
+                  "email": "scanuser@test.com",
+                  "pass": "scanpassword"
                 }
               }
             }
@@ -452,5 +456,21 @@
       ]
     }
   },
-  "authenticationDetails": []
+  "authenticationDetails": [
+    {
+      "bearerAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "ttl": "5m",
+        "default": "bearerAuth",
+        "credentials": {
+          "bearerAuth": {
+            "credential": "{{ENV_API_TOKEN}}",
+            "description": ""
+          }
+        }
+      }
+    }
+  ]
 }
