@@ -69,7 +69,7 @@
           "name": "SCAN42C_HOST",
           "from": "environment",
           "required": false,
-          "default": "http://localhost:4000"
+          "default": "http://localhost:4000/graphql"
         }
       }
     }
