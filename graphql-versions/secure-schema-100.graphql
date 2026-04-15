@@ -1,0 +1,75 @@
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+directive @list(minItems: Int, maxItems: Int) on ARGUMENT_DEFINITION | FIELD_DEFINITION
+directive @cost(weight: String!) on ARGUMENT_DEFINITION | ENUM | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | OBJECT | SCALAR
+
+# directives for security 
+directive @stringValue(minLength: Int, maxLength: Int, pattern: String) on SCALAR
+directive @numberValue(min: Int, max: Int) on SCALAR
+
+# custom scalar definitions for better security
+scalar JWTToken @stringValue(pattern: "^([a-zA-Z0-9_=]{4,})\\.([a-zA-Z0-9_=]{4,})\\.([a-zA-Z0-9_\\-\\+\\/=]{4,})", minLength: 25, maxLength: 1000)
+scalar LastUpdated @stringValue(pattern: "^((?:([0-9]{4}-[0-9]{2}-[0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?))(Z|[\\+-][0-9]{2}:[0-9]{2})?)$", minLength: 27, maxLength: 30)
+
+scalar Uuid @stringValue(pattern: "\b([A-F 0-9]{8})-([A-F 0-9]{4})-([A-F 0-9]{4})-([A-F 0-9]{4})-([A-F 0-9]{12})\b", minLength: 32,maxLength: 32)
+scalar Message @stringValue(pattern: "^.*$", minLength: 25,maxLength: 1000)
+scalar Password @stringValue(pattern: "^.*$", minLength: 25,maxLength: 1000)
+scalar Name @stringValue(pattern: "^.*$", minLength: 25,maxLength: 1000)
+scalar Email @stringValue(pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", minLength: 5,maxLength: 254)
+scalar Vin @stringValue(pattern: "^4[0-9]{15}$", minLength: 16,maxLength: 16)
+scalar Year @numberValue(min: 2000, max: 2032)
+scalar Latitude @numberValue(min: -90, max:90 )
+scalar Longitude @numberValue(min: -180, max: 180)
+scalar Make @stringValue(pattern: "^.*$", minLength: 5,maxLength: 254)
+scalar Model @stringValue(pattern: "^.*$", minLength: 5,maxLength: 254)
+scalar Color @stringValue(pattern: "^.*$", minLength: 5,maxLength: 254)
+scalar Status @stringValue(pattern: "^.*$", minLength: 5,maxLength: 254)
+
+# data definition
+
+type User @cost(weight: "1"){
+  id: Uuid!
+  email: Email!
+  name: String!
+  is_admin: Boolean!
+}
+type VehicleList @cost(weight: "3"){
+  vehicles: [Vehicle] @list(
+    minItems: 0,
+    maxItems: 100
+  )
+}
+
+type Vehicle @cost(weight: "1"){
+  id: Uuid!
+  vin: Vin!
+  lat: Latitude!
+  lng: Longitude!
+  make: Make!
+  model: Model!
+  year: Year!
+  color: Color!
+  status: Status!
+  lastUpdated: LastUpdated!
+}
+
+type AuthPayload @cost(weight: "3") {
+  message: Message!
+  token: JWTToken
+  _id: Uuid!
+}
+
+type Query {
+  allVehicles: VehicleList!
+  vehicle(id: Uuid!): Vehicle
+}
+
+type Mutation {
+  login(email: Email!, pass: Password!): AuthPayload!
+  register(email: Email!, pass: Password!, name: Name!, is_admin: Boolean): AuthPayload!
+  addVehicle(vin: Vin!, lat: Latitude!, lng: Longitude!, make: Make!, model: Model!, year: Year!, color: Color!): Vehicle!
+  updateVehicleLocation(id: Uuid!, lat: Latitude!, lng: Longitude!): Vehicle!
+  deleteVehicle(id: Uuid!): Vehicle!
+}
